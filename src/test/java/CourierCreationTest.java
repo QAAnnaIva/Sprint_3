@@ -1,12 +1,17 @@
 import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Test;
+import ru.praktikum.UserId;
 import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.*;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static ru.praktikum.CreateCourier.CREATE_COURIER;
+import static ru.praktikum.CreateCourier.CREATE_COURIER_WITHOUT_PASSWORD;
+import static ru.praktikum.EndPoints.*;
+import static ru.praktikum.Login.LOGIN_COURIER;
 
 
-public class CourierCreationTest extends EndPoints{
+public class CourierCreationTest  {
 
 
     @Test

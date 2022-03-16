@@ -2,12 +2,15 @@ import io.restassured.response.Response;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import ru.praktikum.Track;
 import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.HTTP_CREATED;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static ru.praktikum.EndPoints.BASE_URI;
+import static ru.praktikum.EndPoints.ORDERS;
 
 @RunWith(Parameterized.class)
-public class OrderCreationTest extends EndPoints{
+public class OrderCreationTest {
 
     private final String firstName;
     private final String lastName;

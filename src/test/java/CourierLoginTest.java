@@ -2,12 +2,16 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.praktikum.UserId;
 import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.*;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static ru.praktikum.CreateCourier.CREATE_COURIER;
+import static ru.praktikum.EndPoints.*;
+import static ru.praktikum.Login.*;
 
 
-public class CourierLoginTest extends EndPoints{
+public class CourierLoginTest  {
 
     @Before
     public void setUp() {

@@ -5,8 +5,10 @@ import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static ru.praktikum.EndPoints.BASE_URI;
+import static ru.praktikum.EndPoints.ORDERS;
 
-public class ListOfOrdersTest extends EndPoints{
+public class ListOfOrdersTest  {
 
     @Test
     public void listOfOrders(){
