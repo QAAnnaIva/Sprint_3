@@ -1,36 +1,34 @@
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static io.restassured.RestAssured.given;
+import static java.net.HttpURLConnection.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 
-public class CourierLoginTest {
+public class CourierLoginTest extends EndPoints{
 
     @Before
     public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
 
                 given()
                         .header("Content-type", "application/json")
                         .and()
-                        .body(createCourier)
+                        .body(CREATE_COURIER)
                         .when()
-                        .post("api/v1/courier");
+                        .post(BASE_URI + COURIER);
     }
-    CreateCourier createCourier = new CreateCourier("anna_ivanova","12345678","Anna");
-    Login login = new Login("ann","12345678");
+
     @Test
     public void loginInto(){
-        Login login = new Login("anna_ivanova","12345678");
+
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .body(login)
-                        .post("/api/v1/courier/login");
-        response.then().assertThat().statusCode(200).body("id",equalTo(response.getBody().as(UserId.class).getId()));
+                        .body(LOGIN_COURIER)
+                        .post(BASE_URI + LOGIN);
+        response.then().statusCode(HTTP_OK).body("id",equalTo(response.getBody().as(UserId.class).getId()));
 
 
     }
@@ -41,40 +39,36 @@ public class CourierLoginTest {
        Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .body(login)
-                        .post("/api/v1/courier/login");
+                        .body(INCORRECT_LOGIN)
+                        .post(BASE_URI + LOGIN);
 
-        response.then().assertThat().statusCode(404).body("message",equalTo("Учетная запись не найдена"));
+        response.then().statusCode(HTTP_NOT_FOUND).body("message",equalTo("Учетная запись не найдена"));
 
     }
 
     @Test
     public void incorrectPassword(){
 
-        Login login = new Login("anna_ivanova","1234567");
-
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .body(login)
-                        .post("/api/v1/courier/login");
+                        .body(INCORRECT_PASSWORD)
+                        .post(BASE_URI + LOGIN);
 
-        response.then().assertThat().statusCode(404).body("message",equalTo("Учетная запись не найдена"));
+        response.then().statusCode(HTTP_NOT_FOUND).body("message",equalTo("Учетная запись не найдена"));
 
     }
 
     @Test
     public void withoutPassword(){
 
-        Login login = new Login("anna_ivanova","");
-
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .body(login)
-                        .post("/api/v1/courier/login");
+                        .body(EMPTY_PASSWORD)
+                        .post(BASE_URI + LOGIN);
 
-        response.then().assertThat().statusCode(400).body("message",equalTo("Недостаточно данных для входа"));
+        response.then().statusCode(HTTP_BAD_REQUEST).body("message",equalTo("Недостаточно данных для входа"));
 
     }
 
@@ -84,15 +78,15 @@ public class CourierLoginTest {
         given()
                 .header("Content-type", "application/json")
                 .and()
-                .body(login)
+                .body(LOGIN_COURIER)
                 .when()
-                .post("/api/v1/courier/login")
+                .post(BASE_URI + LOGIN)
                 .body().as(UserId.class);
 
         given()
                 .header("Content-type", "application/json")
                 .and()
                 .when()
-                .delete("/api/v1/courier/" + userId.getId());
+                .delete(BASE_URI + COURIER + userId.getId());
     }
 }

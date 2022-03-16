@@ -1,14 +1,13 @@
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import static io.restassured.RestAssured.given;
+import static java.net.HttpURLConnection.HTTP_CREATED;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 @RunWith(Parameterized.class)
-public class OrderCreationTest {
+public class OrderCreationTest extends EndPoints{
 
     private final String firstName;
     private final String lastName;
@@ -43,12 +42,6 @@ public class OrderCreationTest {
         };
     }
 
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
-
-    }
-
 
     @Test
     public void createAnOrder() {
@@ -58,9 +51,9 @@ public class OrderCreationTest {
                         .header("Content-type", "application/json")
                         .body(OrderCreationTest.placeAnOrder())
                         .when()
-                        .post("/api/v1/orders");
+                        .post(BASE_URI + ORDERS);
 
-        response.then().assertThat().statusCode(201).body("track",equalTo(response.getBody().as(Track.class).getTrack() ));
+        response.then().statusCode(HTTP_CREATED).body("track",equalTo(response.getBody().as(Track.class).getTrack() ));
         System.out.println(response.getBody().as(Track.class).getTrack());
 
     }

@@ -1,21 +1,12 @@
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static io.restassured.RestAssured.given;
+import static java.net.HttpURLConnection.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 
-public class CourierCreationTest {
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
-
-
-    }
-    CreateCourier createCourier = new CreateCourier("anna_ivanova","12345678","Anna");
-    Login login = new Login("anna_ivanova","12345678");
+public class CourierCreationTest extends EndPoints{
 
 
     @Test
@@ -25,10 +16,10 @@ public class CourierCreationTest {
                 given()
                         .header("Content-type", "application/json")
                         .and()
-                        .body(createCourier)
+                        .body(CREATE_COURIER)
                         .when()
-                        .post("api/v1/courier");
-        response.then().assertThat().statusCode(201).body("ok", equalTo(true));
+                        .post(BASE_URI + COURIER);
+        response.then().statusCode(HTTP_CREATED).body("ok", equalTo(true));
 
     }
 
@@ -39,10 +30,10 @@ public class CourierCreationTest {
                 given()
                         .header("Content-type", "application/json")
                         .and()
-                        .body(createCourier)
+                        .body(CREATE_COURIER)
                         .when()
-                        .post("api/v1/courier");
-        response.then().assertThat().statusCode(201).body("ok", equalTo(true));
+                        .post(BASE_URI + COURIER);
+        response.then().statusCode(HTTP_CREATED).body("ok", equalTo(true));
 
         //повторный запрос на создание с теми же параметрами
 
@@ -50,26 +41,26 @@ public class CourierCreationTest {
                 given()
                         .header("Content-type", "application/json")
                         .and()
-                        .body(createCourier)
+                        .body(CREATE_COURIER)
                         .when()
-                        .post("api/v1/courier");
-        twice.then().assertThat().statusCode(409).body("code", equalTo(409)).body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
+                        .post(BASE_URI + COURIER);
+        twice.then().statusCode(HTTP_CONFLICT).body("code", equalTo(409)).body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
 
 
     }
 
     @Test
     public void notEnoughDataToCreateAnAccount(){
-        CreateCourier createCourier = new CreateCourier("anna_14",null,"Анна");
+
 //запрос на создание курьера, не указан обязательный параметр - пароль
         Response response =
                 given()
                         .header("Content-type", "application/json")
                         .and()
-                        .body(createCourier)
+                        .body(CREATE_COURIER_WITHOUT_PASSWORD)
                         .when()
-                        .post("api/v1/courier");
-        response.then().assertThat().statusCode(400).body("message", equalTo("Недостаточно данных для создания учетной записи"));
+                        .post(BASE_URI + COURIER);
+        response.then().statusCode(HTTP_BAD_REQUEST).body("message", equalTo("Недостаточно данных для создания учетной записи"));
 
     }
 
@@ -81,17 +72,17 @@ public class CourierCreationTest {
                 given()
                         .header("Content-type", "application/json")
                         .and()
-                        .body(login)
+                        .body(LOGIN_COURIER)
                         .when()
-                        .post("/api/v1/courier/login")
+                        .post(BASE_URI + LOGIN)
                         .body().as(UserId.class);
 
         given()
                 .header("Content-type", "application/json")
                 .and()
-                .body(login)
+                .body(LOGIN_COURIER)
                 .when()
-                .delete("/api/v1/courier/" + userId.getId());
+                .delete(BASE_URI + COURIER + userId.getId());
     }
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="3" failures="0" name="OrderCreationTest" time="0.516" errors="0" skipped="0">
+<testsuite tests="3" failures="0" name="OrderCreationTest" time="0.422" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2020.3.3"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -64,7 +64,7 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="OrderCreationTest" name="createAnOrder[0]" time="0.178"/>
-  <testcase classname="OrderCreationTest" name="createAnOrder[1]" time="0.163"/>
-  <testcase classname="OrderCreationTest" name="createAnOrder[2]" time="0.175"/>
+  <testcase classname="OrderCreationTest" name="createAnOrder[0]" time="0.158"/>
+  <testcase classname="OrderCreationTest" name="createAnOrder[1]" time="0.133"/>
+  <testcase classname="OrderCreationTest" name="createAnOrder[2]" time="0.131"/>
 </testsuite>
