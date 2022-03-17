@@ -1,5 +1,7 @@
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import ru.praktikum.UserId;
 import static io.restassured.RestAssured.given;
@@ -13,6 +15,10 @@ import static ru.praktikum.Login.LOGIN_COURIER;
 
 public class CourierCreationTest  {
 
+    @Before
+    public void setUp(){
+        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+    }
 
     @Test
     public void createNewCourier(){
@@ -23,7 +29,7 @@ public class CourierCreationTest  {
                         .and()
                         .body(CREATE_COURIER)
                         .when()
-                        .post(BASE_URI + COURIER);
+                        .post(COURIER);
         response.then().statusCode(HTTP_CREATED).body("ok", equalTo(true));
 
     }
@@ -37,7 +43,7 @@ public class CourierCreationTest  {
                         .and()
                         .body(CREATE_COURIER)
                         .when()
-                        .post(BASE_URI + COURIER);
+                        .post(COURIER);
         response.then().statusCode(HTTP_CREATED).body("ok", equalTo(true));
 
         //повторный запрос на создание с теми же параметрами
@@ -48,7 +54,7 @@ public class CourierCreationTest  {
                         .and()
                         .body(CREATE_COURIER)
                         .when()
-                        .post(BASE_URI + COURIER);
+                        .post(COURIER);
         twice.then().statusCode(HTTP_CONFLICT).body("code", equalTo(409)).body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
 
 
@@ -64,7 +70,7 @@ public class CourierCreationTest  {
                         .and()
                         .body(CREATE_COURIER_WITHOUT_PASSWORD)
                         .when()
-                        .post(BASE_URI + COURIER);
+                        .post(COURIER);
         response.then().statusCode(HTTP_BAD_REQUEST).body("message", equalTo("Недостаточно данных для создания учетной записи"));
 
     }
@@ -79,7 +85,7 @@ public class CourierCreationTest  {
                         .and()
                         .body(LOGIN_COURIER)
                         .when()
-                        .post(BASE_URI + LOGIN)
+                        .post(LOGIN)
                         .body().as(UserId.class);
 
         given()
@@ -87,7 +93,7 @@ public class CourierCreationTest  {
                 .and()
                 .body(LOGIN_COURIER)
                 .when()
-                .delete(BASE_URI + COURIER + userId.getId());
+                .delete(COURIER + userId.getId());
     }
 
 

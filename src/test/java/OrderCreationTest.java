@@ -1,4 +1,6 @@
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -6,11 +8,15 @@ import ru.praktikum.Track;
 import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.HTTP_CREATED;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static ru.praktikum.EndPoints.BASE_URI;
 import static ru.praktikum.EndPoints.ORDERS;
 
 @RunWith(Parameterized.class)
 public class OrderCreationTest {
+
+    @Before
+    public void setUp(){
+        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+    }
 
     private final String firstName;
     private final String lastName;
@@ -54,7 +60,7 @@ public class OrderCreationTest {
                         .header("Content-type", "application/json")
                         .body(OrderCreationTest.placeAnOrder())
                         .when()
-                        .post(BASE_URI + ORDERS);
+                        .post(ORDERS);
 
         response.then().statusCode(HTTP_CREATED).body("track",equalTo(response.getBody().as(Track.class).getTrack() ));
         System.out.println(response.getBody().as(Track.class).getTrack());
